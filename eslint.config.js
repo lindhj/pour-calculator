@@ -1,24 +1,29 @@
-import js from '@eslint/js';
-import solid from 'eslint-plugin-solid/configs/recommended';
-import prettier from 'eslint-config-prettier';
+import globals from "globals";
+import js from "@eslint/js";
+import solid from "eslint-plugin-solid/configs/recommended";
+import prettier from "eslint-config-prettier";
 
 export default [
   js.configs.recommended,
   solid,
   prettier,
   {
-    files: ['**/*.{js,jsx}'],
+    files: ["**/*.{js,jsx}"],
     languageOptions: {
       ecmaVersion: 2024,
-      sourceType: 'module',
+      sourceType: "module",
       parserOptions: {
         ecmaFeatures: {
           jsx: true,
         },
       },
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+      },
     },
     rules: {
-      'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
     },
   },
 ];

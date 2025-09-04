@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js';
+import { createSignal } from "solid-js";
 
 function App() {
   const [segmentCount, setSegmentCount] = createSignal(2);
@@ -11,8 +11,8 @@ function App() {
   };
 
   const createSegments = () => {
-    return Array.from({ length: segmentCount() }, (_, i) => (
-      <div key={i} class="segment"></div>
+    return Array.from({ length: segmentCount() }, () => (
+      <div class="segment" />
     ));
   };
 
@@ -30,9 +30,7 @@ function App() {
           onInput={handleInput}
         />
       </div>
-      <div class="bar-container">
-        {createSegments()}
-      </div>
+      <div class="bar-container">{createSegments()}</div>
     </div>
   );
 }
