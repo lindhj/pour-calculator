@@ -84,17 +84,24 @@ function App() {
 
     for (let i = 0; i < segmentCount(); i++) {
       let cumulativeAmount;
+      let segmentAmount;
 
       if (i === 0) {
         // First segment is the bloom
         cumulativeAmount = bloomAmount;
+        segmentAmount = bloomAmount;
       } else {
         // Subsequent segments are bloom + remaining water divided equally
         cumulativeAmount = bloomAmount + i * waterPerRemainingSegment;
+        segmentAmount = waterPerRemainingSegment;
       }
 
+      // Calculate flex basis as proportion of total water
+      const flexBasis =
+        waterAmount() > 0 ? (segmentAmount / waterAmount()) * 100 : 0;
+
       segments.push(
-        <div class="segment-wrapper">
+        <div class="segment-wrapper" style={{ flex: `0 0 ${flexBasis}%` }}>
           <div class="segment" />
           <div class="segment-label">{Math.round(cumulativeAmount)}g</div>
         </div>,
