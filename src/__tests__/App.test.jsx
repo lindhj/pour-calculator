@@ -144,3 +144,47 @@ test("single segment uses normal styling (not bloom)", () => {
   const styles = window.getComputedStyle(segmentDiv);
   expect(styles.backgroundColor).not.toBe("rgb(255, 107, 53)"); // Not orange
 });
+
+test("ratio calculates when coffee and water are manually set", () => {
+  const { getByLabelText } = render(() => <App />);
+
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Set coffee first and mark as user-modified
+  fireEvent.input(coffeeInput, { target: { value: "30" } });
+  fireEvent.blur(coffeeInput);
+  expect(coffeeInput).toHaveValue(30);
+  expect(waterInput).toHaveValue(450); // 30 * 15 = 450
+  expect(ratioInput).toHaveValue(15); // ratio stays the same
+
+  // Now manually set water to a different value and mark as user-modified
+  fireEvent.input(waterInput, { target: { value: "360" } });
+  fireEvent.blur(waterInput);
+  expect(waterInput).toHaveValue(360);
+  expect(coffeeInput).toHaveValue(30); // coffee stays the same
+  expect(ratioInput).toHaveValue(12); // ratio should calculate: 360/30 = 12
+});
+
+test("ratio calculates regardless of field order (water first, then coffee)", () => {
+  const { getByLabelText } = render(() => <App />);
+
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Set water first and mark as user-modified
+  fireEvent.input(waterInput, { target: { value: "240" } });
+  fireEvent.blur(waterInput);
+  expect(waterInput).toHaveValue(240);
+  expect(coffeeInput).toHaveValue(16); // 240 / 15 = 16
+  expect(ratioInput).toHaveValue(15); // ratio stays the same
+
+  // Now manually set coffee to a different value and mark as user-modified
+  fireEvent.input(coffeeInput, { target: { value: "20" } });
+  fireEvent.blur(coffeeInput);
+  expect(coffeeInput).toHaveValue(20);
+  expect(waterInput).toHaveValue(240); // water stays the same
+  expect(ratioInput).toHaveValue(12); // ratio should calculate: 240/20 = 12
+});

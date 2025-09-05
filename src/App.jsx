@@ -7,6 +7,7 @@ function App() {
   const [bloomFactor, setBloomFactor] = createSignal(2.5);
   const [ratio, setRatio] = createSignal(15);
   const [lastChanged, setLastChanged] = createSignal("coffee");
+  const [userModified, setUserModified] = createSignal({ coffee: false, water: false, ratio: false });
 
   const handleSegmentInput = (e) => {
     const value = parseInt(e.target.value) || 1;
@@ -25,9 +26,21 @@ function App() {
     const value = parseFloat(inputValue);
     if (!isNaN(value) && value >= 0) {
       setCoffeeAmount(value);
-      setWaterAmount(value * ratio());
+      if (userModified().water && waterAmount() > 0 && value > 0) {
+        // Both coffee and water are user-modified, calculate ratio
+        setRatio(waterAmount() / value);
+        setUserModified(prev => ({ ...prev, ratio: false })); // ratio is now calculated
+      } else {
+        // Update water based on current ratio
+        setWaterAmount(value * ratio());
+        setUserModified(prev => ({ ...prev, water: false })); // water is now calculated
+      }
       setLastChanged("coffee");
     }
+  };
+
+  const handleCoffeeBlur = () => {
+    setUserModified(prev => ({ ...prev, coffee: true }));
   };
 
   const handleWaterInput = (e) => {
@@ -40,9 +53,21 @@ function App() {
     const value = parseFloat(inputValue);
     if (!isNaN(value) && value >= 0) {
       setWaterAmount(value);
-      setCoffeeAmount(value / ratio());
+      if (userModified().coffee && coffeeAmount() > 0 && value > 0) {
+        // Both coffee and water are user-modified, calculate ratio
+        setRatio(value / coffeeAmount());
+        setUserModified(prev => ({ ...prev, ratio: false })); // ratio is now calculated
+      } else {
+        // Update coffee based on current ratio
+        setCoffeeAmount(value / ratio());
+        setUserModified(prev => ({ ...prev, coffee: false })); // coffee is now calculated
+      }
       setLastChanged("water");
     }
+  };
+
+  const handleWaterBlur = () => {
+    setUserModified(prev => ({ ...prev, water: true }));
   };
 
   const handleBloomFactorInput = (e) => {
@@ -68,10 +93,16 @@ function App() {
       setRatio(value);
       if (lastChanged() === "coffee") {
         setWaterAmount(coffeeAmount() * value);
+        setUserModified(prev => ({ ...prev, water: false })); // water is now calculated
       } else {
         setCoffeeAmount(waterAmount() / value);
+        setUserModified(prev => ({ ...prev, coffee: false })); // coffee is now calculated
       }
     }
+  };
+
+  const handleRatioBlur = () => {
+    setUserModified(prev => ({ ...prev, ratio: true }));
   };
 
   const createSegments = () => {
@@ -132,6 +163,7 @@ function App() {
               min="0"
               value={coffeeAmount()}
               onInput={handleCoffeeInput}
+              onBlur={handleCoffeeBlur}
             />
           </div>
           <div class="input-field">
@@ -143,6 +175,7 @@ function App() {
               min="0"
               value={waterAmount()}
               onInput={handleWaterInput}
+              onBlur={handleWaterBlur}
             />
           </div>
           <div class="input-field">
@@ -154,6 +187,7 @@ function App() {
               min="1"
               value={ratio()}
               onInput={handleRatioInput}
+              onBlur={handleRatioBlur}
             />
           </div>
           <div class="input-field">
