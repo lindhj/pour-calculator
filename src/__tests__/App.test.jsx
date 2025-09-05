@@ -188,3 +188,33 @@ test("ratio calculates regardless of field order (water first, then coffee)", ()
   expect(waterInput).toHaveValue(240); // water stays the same
   expect(ratioInput).toHaveValue(12); // ratio should calculate: 240/20 = 12
 });
+
+test("bloom overflow creates single blue segment instead of overflowing", () => {
+  const { container, getByLabelText } = render(() => <App />);
+
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const bloomFactorInput = getByLabelText("Bloom Factor:");
+  const segmentInput = getByLabelText("Number of segments:");
+
+  // Set up scenario where bloom would overflow (10g coffee * 3x bloom = 30g, but only 20g water)
+  // Use blur events to mark fields as user-modified and avoid cross-calculations
+  fireEvent.input(coffeeInput, { target: { value: "10" } });
+  fireEvent.blur(coffeeInput);
+  fireEvent.input(waterInput, { target: { value: "20" } });
+  fireEvent.blur(waterInput);
+  fireEvent.input(bloomFactorInput, { target: { value: "3" } });
+  fireEvent.input(segmentInput, { target: { value: "3" } });
+
+  // Should render as single segment instead of 3 segments
+  const segments = container.querySelectorAll(".segment-wrapper");
+  expect(segments).toHaveLength(1);
+
+  // Should show total water amount (20g) and be blue (not orange)
+  const label = container.querySelector(".segment-label");
+  expect(label).toHaveTextContent("20g");
+
+  // Should not have bloom styling since it's treated as single segment
+  const segmentDiv = container.querySelector(".segment");
+  expect(segmentDiv).not.toHaveClass("bloom");
+});

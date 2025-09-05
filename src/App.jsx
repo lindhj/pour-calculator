@@ -7,7 +7,11 @@ function App() {
   const [bloomFactor, setBloomFactor] = createSignal(2.5);
   const [ratio, setRatio] = createSignal(15);
   const [lastChanged, setLastChanged] = createSignal("coffee");
-  const [userModified, setUserModified] = createSignal({ coffee: false, water: false, ratio: false });
+  const [userModified, setUserModified] = createSignal({
+    coffee: false,
+    water: false,
+    ratio: false,
+  });
 
   const handleSegmentInput = (e) => {
     const value = parseInt(e.target.value) || 1;
@@ -29,18 +33,18 @@ function App() {
       if (userModified().water && waterAmount() > 0 && value > 0) {
         // Both coffee and water are user-modified, calculate ratio
         setRatio(waterAmount() / value);
-        setUserModified(prev => ({ ...prev, ratio: false })); // ratio is now calculated
+        setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
       } else {
         // Update water based on current ratio
         setWaterAmount(value * ratio());
-        setUserModified(prev => ({ ...prev, water: false })); // water is now calculated
+        setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
       }
       setLastChanged("coffee");
     }
   };
 
   const handleCoffeeBlur = () => {
-    setUserModified(prev => ({ ...prev, coffee: true }));
+    setUserModified((prev) => ({ ...prev, coffee: true }));
   };
 
   const handleWaterInput = (e) => {
@@ -56,18 +60,18 @@ function App() {
       if (userModified().coffee && coffeeAmount() > 0 && value > 0) {
         // Both coffee and water are user-modified, calculate ratio
         setRatio(value / coffeeAmount());
-        setUserModified(prev => ({ ...prev, ratio: false })); // ratio is now calculated
+        setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
       } else {
         // Update coffee based on current ratio
         setCoffeeAmount(value / ratio());
-        setUserModified(prev => ({ ...prev, coffee: false })); // coffee is now calculated
+        setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
       }
       setLastChanged("water");
     }
   };
 
   const handleWaterBlur = () => {
-    setUserModified(prev => ({ ...prev, water: true }));
+    setUserModified((prev) => ({ ...prev, water: true }));
   };
 
   const handleBloomFactorInput = (e) => {
@@ -93,35 +97,42 @@ function App() {
       setRatio(value);
       if (lastChanged() === "coffee") {
         setWaterAmount(coffeeAmount() * value);
-        setUserModified(prev => ({ ...prev, water: false })); // water is now calculated
+        setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
       } else {
         setCoffeeAmount(waterAmount() / value);
-        setUserModified(prev => ({ ...prev, coffee: false })); // coffee is now calculated
+        setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
       }
     }
   };
 
   const handleRatioBlur = () => {
-    setUserModified(prev => ({ ...prev, ratio: true }));
+    setUserModified((prev) => ({ ...prev, ratio: true }));
   };
 
   const createSegments = () => {
-    const bloomAmount = coffeeAmount() * bloomFactor();
+    const calculatedBloomAmount = coffeeAmount() * bloomFactor();
+    const bloomOverflows = calculatedBloomAmount >= waterAmount();
+
+    // If bloom would overflow, treat as single segment regardless of segmentCount
+    const effectiveSegmentCount =
+      bloomOverflows && segmentCount() > 1 ? 1 : segmentCount();
+
+    const bloomAmount = Math.min(calculatedBloomAmount, waterAmount());
     const remainingWater = waterAmount() - bloomAmount;
-    const remainingSegments = segmentCount() - 1;
+    const remainingSegments = effectiveSegmentCount - 1;
     const waterPerRemainingSegment =
       remainingSegments > 0 ? remainingWater / remainingSegments : 0;
     const segments = [];
 
-    for (let i = 0; i < segmentCount(); i++) {
+    for (let i = 0; i < effectiveSegmentCount; i++) {
       let cumulativeAmount;
       let segmentAmount;
 
-      if (i === 0 && segmentCount() > 1) {
+      if (i === 0 && effectiveSegmentCount > 1) {
         // First segment is the bloom (only when there are multiple segments)
         cumulativeAmount = bloomAmount;
         segmentAmount = bloomAmount;
-      } else if (segmentCount() === 1) {
+      } else if (effectiveSegmentCount === 1) {
         // Single segment gets all the water
         cumulativeAmount = waterAmount();
         segmentAmount = waterAmount();
@@ -135,7 +146,7 @@ function App() {
       const flexBasis =
         waterAmount() > 0 ? (segmentAmount / waterAmount()) * 100 : 0;
 
-      const isBloom = i === 0 && segmentCount() > 1;
+      const isBloom = i === 0 && effectiveSegmentCount > 1;
       segments.push(
         <div class="segment-wrapper" style={{ flex: `0 0 ${flexBasis}%` }}>
           <div class={`segment${isBloom ? " bloom" : ""}`} />
