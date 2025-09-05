@@ -12,11 +12,12 @@
 
 ## Completed features
 
-- Basic ratio visualization with segmented horizontal bar
+- Ratio visualization with segmented, proportional horizontal bar
 - Integer input controlling number of segments
 - Real-time updates as user types
-- Coffee to water calculator with a hardcoded ratio
+- Coffee to water calculator with intelligent last change wins reactive approach
 - Hooking up the calculated water amount to the segment and ratio visualization
+- Basic testing
 
 ## Current Focus
 
