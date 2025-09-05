@@ -25,6 +25,10 @@
 ## Commit Message Guidelines
 
 - IMPORTANT: Commit messages should be descriptive but short and contain no information about the author or AI tool
+  - DO NOT add any ads such as "Generated with Claude Code"
+- Only generate the message for staged files/changes
+- Don't add any files using git add. The user will decide what to add
+- Ignore changes to CLAUDE.md in the commit message
 
 ## Technical Specifications
 

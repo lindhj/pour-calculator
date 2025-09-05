@@ -5,8 +5,8 @@ function App() {
   const [coffeeAmount, setCoffeeAmount] = createSignal(20);
   const [waterAmount, setWaterAmount] = createSignal(300);
   const [bloomFactor, setBloomFactor] = createSignal(2.5);
-
-  const RATIO = 15;
+  const [ratio, setRatio] = createSignal(15);
+  const [lastChanged, setLastChanged] = createSignal("coffee");
 
   const handleInput = (e) => {
     const value = parseInt(e.target.value) || 1;
@@ -25,7 +25,8 @@ function App() {
     const value = parseFloat(inputValue);
     if (!isNaN(value) && value >= 0) {
       setCoffeeAmount(value);
-      setWaterAmount(value * RATIO);
+      setWaterAmount(value * ratio());
+      setLastChanged("coffee");
     }
   };
 
@@ -39,7 +40,8 @@ function App() {
     const value = parseFloat(inputValue);
     if (!isNaN(value) && value >= 0) {
       setWaterAmount(value);
-      setCoffeeAmount(value / RATIO);
+      setCoffeeAmount(value / ratio());
+      setLastChanged("water");
     }
   };
 
@@ -52,6 +54,23 @@ function App() {
     const value = parseFloat(inputValue);
     if (!isNaN(value) && value >= 0) {
       setBloomFactor(value);
+    }
+  };
+
+  const handleRatioInput = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue === "") {
+      setRatio(15);
+      return;
+    }
+    const value = parseFloat(inputValue);
+    if (!isNaN(value) && value > 0) {
+      setRatio(value);
+      if (lastChanged() === "coffee") {
+        setWaterAmount(coffeeAmount() * value);
+      } else {
+        setCoffeeAmount(waterAmount() / value);
+      }
     }
   };
 
@@ -90,7 +109,7 @@ function App() {
       <h1>Ratio Visualizer</h1>
 
       <div class="calculator-section">
-        <h2>Coffee to Water Calculator (1:15 ratio)</h2>
+        <h2>Coffee to Water Calculator (1:{ratio()} ratio)</h2>
         <div class="input-group">
           <div class="input-field">
             <label for="coffee-input">Coffee (g):</label>
@@ -112,6 +131,17 @@ function App() {
               min="0"
               value={waterAmount()}
               onInput={handleWaterInput}
+            />
+          </div>
+          <div class="input-field">
+            <label for="ratio-input">Ratio (1:x):</label>
+            <input
+              id="ratio-input"
+              type="number"
+              step="0.1"
+              min="1"
+              value={ratio()}
+              onInput={handleRatioInput}
             />
           </div>
           <div class="input-field">
