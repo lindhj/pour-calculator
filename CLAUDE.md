@@ -22,6 +22,10 @@
 
 - Looking into simple unit testing
 
+## Commit Message Guidelines
+
+- IMPORTANT: Commit messages should be descriptive but short and contain no information about the author or AI tool
+
 ## Technical Specifications
 
 - **Framework**: SolidJS
@@ -56,7 +60,6 @@
 - Inline styles or minimal CSS
 - Focus on readability over optimization
 - No build optimizations needed initially
-- IMPORTANT: Commit messages should be descriptive but short and contain no information about the author or AI tool
 
 ## Code Style
 
