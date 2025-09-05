@@ -43,9 +43,20 @@ function App() {
   };
 
   const createSegments = () => {
-    return Array.from({ length: segmentCount() }, () => (
-      <div class="segment" />
-    ));
+    const waterPerSegment = waterAmount() / segmentCount();
+    const segments = [];
+
+    for (let i = 0; i < segmentCount(); i++) {
+      const cumulativeAmount = (i + 1) * waterPerSegment;
+      segments.push(
+        <div class="segment-wrapper">
+          <div class="segment" />
+          <div class="segment-label">{Math.round(cumulativeAmount)}g</div>
+        </div>,
+      );
+    }
+
+    return segments;
   };
 
   return (

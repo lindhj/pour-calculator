@@ -54,21 +54,37 @@ body {
 
 .bar-container {
   width: 80%;
-  height: 60px;
+  height: 80px;
   display: flex;
   border: 2px solid #333;
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
+  position: relative;
+}
+
+.segment-wrapper {
+  flex: 1;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 .segment {
-  flex: 1;
+  height: 60px;
   background-color: #007acc;
   border-right: 2px solid #333;
 }
 
-.segment:last-child {
+.segment-wrapper:last-child .segment {
   border-right: none;
+}
+
+.segment-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+  margin-top: 2px;
 }
 
 .calculator-section {

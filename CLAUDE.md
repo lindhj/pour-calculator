@@ -7,14 +7,18 @@
 - This application helps in:
   1.  Calculating the amounts based on two known factors
   2.  Calculating and visualizing the number of desired pours based on the total amount of water
+- As the brewer is pouring water, they're looking at the amount of total water poured in the scale. The segment visualization should therefore have checkpoints for the total amount of water. For example, if 300 g of water is divided into 3 100 g pours or segments, the lines dividing the segments in the visualization should serve as checkpoints 0 g, 100 g, 200 g and 300 g.
 
 ## Completed features
 
 - Basic ratio visualization with segmented horizontal bar
 - Integer input controlling number of segments
 - Real-time updates as user types
+- Coffee to water calculator with a hardcoded ratio
 
 ## Current Focus
+
+- Hooking up the calculated water amount to the segment and ratio visualization
 
 ## Technical Specifications
 
