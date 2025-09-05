@@ -12,16 +12,18 @@
 
 ## Completed features
 
-- Ratio visualization with segmented, proportional horizontal bar
-- Integer input controlling number of segments
-- Real-time updates as user types
-- Coffee to water calculator with intelligent last change wins reactive approach
-- Hooking up the calculated water amount to the segment and ratio visualization
-- Basic testing
+- Coffee to water calculator with intelligent "last change wins" reactive approach
+- Three-field input system (coffee, water, ratio) with automatic calculations
+- Bloom factor support (configurable multiplier for first pour)
+- Segmented horizontal bar visualization with proportional sizing
+- Cumulative weight checkpoints displayed on each segment
+- Bloom overflow handling (single segment when bloom exceeds total water)
+- Visual distinction for bloom segment vs regular segments
+- Real-time updates and input validation
+- Display value rounding (max 2 decimal places)
+- Comprehensive test coverage with input validation and interaction tests
 
 ## Current Focus
-
-- Looking into simple unit testing
 
 ## Commit Message Guidelines
 
