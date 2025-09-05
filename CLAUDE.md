@@ -68,3 +68,14 @@
 ## Code Style
 
 - Linting and formatting is done with eslint, eslint-plugin-solid and prettier. Adhere to existing code style.
+
+## Bash Commands
+
+- **Development**: `npm run dev` - Start local development server with hot-reloading
+- **Build**: `npm run build` - Build production bundle
+- **Preview**: `npm run preview` - Preview production build locally
+- **Test**: `npm test` - Run test suite with Vitest
+- **Lint**: `npm run lint` - Check code for linting issues
+- **Lint Fix**: `npm run lint:fix` - Automatically fix linting issues
+- **Format**: `npm run format` - Format code with Prettier
+- **Format Check**: `npm run format:check` - Check if code is properly formatted
