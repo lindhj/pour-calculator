@@ -70,3 +70,52 @@ body {
 .segment:last-child {
   border-right: none;
 }
+
+.calculator-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.calculator-section h2 {
+  margin: 0;
+  color: #333;
+  font-size: 18px;
+}
+
+.input-group {
+  display: flex;
+  gap: 20px;
+}
+
+.input-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-field label {
+  font-weight: 600;
+  color: #333;
+}
+
+.input-field input {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 4px;
+  text-align: center;
+  width: 100px;
+}
+
+.input-field input:focus {
+  outline: none;
+  border-color: #007acc;
+}

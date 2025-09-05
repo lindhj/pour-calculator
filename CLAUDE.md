@@ -1,5 +1,21 @@
 # Product Requirements Document: Ratio Visualizer
 
+## Purpose of application
+
+- In brewing filter coffee manually, such that hot water is poured over coffee grounds in a paper filter which is in a dripper set over a mug or server, the amount of water can be split into several pours, typically no more than 5. The amount of water poured is tracked with a scale. This application helps in calculating the pour amounts.
+- The total amount of water in grams is determined by the amount of coffee grounds in grams, as well as the ratio of coffee to water. The ratio is expressed as for example 1:15, meaning 1 part coffee to 15 parts of water. When deciding these quantities, typically the ratio is known in advance, and either the amount of water must be solved for (knowing the desired amount of coffee grounds to use), or the amount of coffee must be solved for (optimizing for easy to divide amount of water, for example dividing 250 g of water into 5 50 g pours)
+- This application helps in:
+  1.  Calculating the amounts based on two known factors
+  2.  Calculating and visualizing the number of desired pours based on the total amount of water
+
+## Completed features
+
+- Basic ratio visualization with segmented horizontal bar
+- Integer input controlling number of segments
+- Real-time updates as user types
+
+## Current Focus
+
 ## Technical Specifications
 
 - **Framework**: SolidJS
@@ -39,9 +55,3 @@
 ## Code Style
 
 - Linting and formatting is done with eslint, eslint-plugin-solid and prettier. Adhere to existing code style.
-
-## Current Focus
-
-- Basic ratio visualization with segmented horizontal bar
-- Integer input controlling number of segments
-- Real-time updates as user types
