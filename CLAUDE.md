@@ -16,17 +16,18 @@
 - Integer input controlling number of segments
 - Real-time updates as user types
 - Coffee to water calculator with a hardcoded ratio
+- Hooking up the calculated water amount to the segment and ratio visualization
 
 ## Current Focus
 
-- Hooking up the calculated water amount to the segment and ratio visualization
+- Looking into simple unit testing
 
 ## Technical Specifications
 
 - **Framework**: SolidJS
 - **Build Tool**: Vite
 - **Dependencies**: Only solid-js and vite (dev dependency)
-- **No additional libraries** for styling, routing, state management, or testing
+- **No additional libraries** for styling, routing or state management
 - **Development**: `npm run dev` for local development with hot-reloading
 
 ## Architecture Principles
