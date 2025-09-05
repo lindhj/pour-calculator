@@ -86,10 +86,14 @@ function App() {
       let cumulativeAmount;
       let segmentAmount;
 
-      if (i === 0) {
-        // First segment is the bloom
+      if (i === 0 && segmentCount() > 1) {
+        // First segment is the bloom (only when there are multiple segments)
         cumulativeAmount = bloomAmount;
         segmentAmount = bloomAmount;
+      } else if (segmentCount() === 1) {
+        // Single segment gets all the water
+        cumulativeAmount = waterAmount();
+        segmentAmount = waterAmount();
       } else {
         // Subsequent segments are bloom + remaining water divided equally
         cumulativeAmount = bloomAmount + i * waterPerRemainingSegment;
@@ -100,9 +104,10 @@ function App() {
       const flexBasis =
         waterAmount() > 0 ? (segmentAmount / waterAmount()) * 100 : 0;
 
+      const isBloom = i === 0 && segmentCount() > 1;
       segments.push(
         <div class="segment-wrapper" style={{ flex: `0 0 ${flexBasis}%` }}>
-          <div class="segment" />
+          <div class={`segment${isBloom ? ' bloom' : ''}`} />
           <div class="segment-label">{Math.round(cumulativeAmount)}g</div>
         </div>,
       );

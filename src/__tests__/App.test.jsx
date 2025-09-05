@@ -125,3 +125,22 @@ test("segments are rendered", () => {
   const labels = container.querySelectorAll(".segment-label");
   expect(labels).toHaveLength(2);
 });
+
+test("single segment uses normal styling (not bloom)", () => {
+  const { container, getByLabelText } = render(() => <App />);
+
+  const segmentInput = getByLabelText("Number of segments:");
+  fireEvent.input(segmentInput, { target: { value: "1" } });
+
+  const segments = container.querySelectorAll(".segment-wrapper");
+  expect(segments).toHaveLength(1);
+
+  // With single segment, it should show total water amount (300g)
+  const label = container.querySelector(".segment-label");
+  expect(label).toHaveTextContent("300g");
+
+  // Should not have bloom styling (first-child selector applies orange color)
+  const segmentDiv = container.querySelector(".segment");
+  const styles = window.getComputedStyle(segmentDiv);
+  expect(styles.backgroundColor).not.toBe("rgb(255, 107, 53)"); // Not orange
+});
