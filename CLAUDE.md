@@ -8,6 +8,7 @@
   1.  Calculating the amounts based on two known factors
   2.  Calculating and visualizing the number of desired pours based on the total amount of water
 - As the brewer is pouring water, they're looking at the amount of total water poured in the scale. The segment visualization should therefore have checkpoints for the total amount of water. For example, if 300 g of water is divided into 3 100 g pours or segments, the lines dividing the segments in the visualization should serve as checkpoints 0 g, 100 g, 200 g and 300 g.
+- Additionally brewers often place importance on the first pour, or the "bloom" which is meant to wet the grounds, allowing the release of CO2. The amount of water is typically 2-3 times the weight of the coffee grounds. It should be possible to take the bloom into account as a separate pour, even if the remaining water is then divided into equal pours.
 
 ## Completed features
 
@@ -54,7 +55,7 @@
 - Inline styles or minimal CSS
 - Focus on readability over optimization
 - No build optimizations needed initially
-- Commit messages should be descriptive but short and contain no information about the author or AI tool
+- IMPORTANT: Commit messages should be descriptive but short and contain no information about the author or AI tool
 
 ## Code Style
 

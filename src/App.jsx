@@ -4,6 +4,7 @@ function App() {
   const [segmentCount, setSegmentCount] = createSignal(2);
   const [coffeeAmount, setCoffeeAmount] = createSignal(20);
   const [waterAmount, setWaterAmount] = createSignal(300);
+  const [bloomFactor, setBloomFactor] = createSignal(2.5);
 
   const RATIO = 15;
 
@@ -42,12 +43,37 @@ function App() {
     }
   };
 
+  const handleBloomFactorInput = (e) => {
+    const inputValue = e.target.value;
+    if (inputValue === "") {
+      setBloomFactor(2.5);
+      return;
+    }
+    const value = parseFloat(inputValue);
+    if (!isNaN(value) && value >= 0) {
+      setBloomFactor(value);
+    }
+  };
+
   const createSegments = () => {
-    const waterPerSegment = waterAmount() / segmentCount();
+    const bloomAmount = coffeeAmount() * bloomFactor();
+    const remainingWater = waterAmount() - bloomAmount;
+    const remainingSegments = segmentCount() - 1;
+    const waterPerRemainingSegment =
+      remainingSegments > 0 ? remainingWater / remainingSegments : 0;
     const segments = [];
 
     for (let i = 0; i < segmentCount(); i++) {
-      const cumulativeAmount = (i + 1) * waterPerSegment;
+      let cumulativeAmount;
+
+      if (i === 0) {
+        // First segment is the bloom
+        cumulativeAmount = bloomAmount;
+      } else {
+        // Subsequent segments are bloom + remaining water divided equally
+        cumulativeAmount = bloomAmount + i * waterPerRemainingSegment;
+      }
+
       segments.push(
         <div class="segment-wrapper">
           <div class="segment" />
@@ -86,6 +112,17 @@ function App() {
               min="0"
               value={waterAmount()}
               onInput={handleWaterInput}
+            />
+          </div>
+          <div class="input-field">
+            <label for="bloom-factor-input">Bloom Factor:</label>
+            <input
+              id="bloom-factor-input"
+              type="number"
+              step="0.1"
+              min="0"
+              value={bloomFactor()}
+              onInput={handleBloomFactorInput}
             />
           </div>
         </div>
