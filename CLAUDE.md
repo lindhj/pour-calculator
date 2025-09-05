@@ -34,6 +34,7 @@
 - Inline styles or minimal CSS
 - Focus on readability over optimization
 - No build optimizations needed initially
+- Commit messages should be descriptive but short and contain no information about the author or AI tool
 
 ## Code Style
 
