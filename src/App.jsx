@@ -8,7 +8,7 @@ function App() {
   const [ratio, setRatio] = createSignal(15);
   const [lastChanged, setLastChanged] = createSignal("coffee");
 
-  const handleInput = (e) => {
+  const handleSegmentInput = (e) => {
     const value = parseInt(e.target.value) || 1;
     if (value >= 1 && value <= 99) {
       setSegmentCount(value);
@@ -173,7 +173,7 @@ function App() {
           min="1"
           max="99"
           value={segmentCount()}
-          onInput={handleInput}
+          onInput={handleSegmentInput}
         />
       </div>
       <div class="bar-container">{createSegments()}</div>
