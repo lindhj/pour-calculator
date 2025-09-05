@@ -109,6 +109,11 @@ function App() {
     setUserModified((prev) => ({ ...prev, ratio: true }));
   };
 
+  const formatDisplayValue = (value) => {
+    if (value === 0) return 0;
+    return Math.round(value * 100) / 100;
+  };
+
   const createSegments = () => {
     const calculatedBloomAmount = coffeeAmount() * bloomFactor();
     const bloomOverflows = calculatedBloomAmount >= waterAmount();
@@ -163,7 +168,9 @@ function App() {
       <h1>Pour Calculator</h1>
 
       <div class="calculator-section">
-        <h2>Coffee to Water Calculator (1:{ratio()} ratio)</h2>
+        <h2>
+          Coffee to Water Calculator (1:{formatDisplayValue(ratio())} ratio)
+        </h2>
         <div class="input-group">
           <div class="input-field">
             <label for="coffee-input">Coffee (g):</label>
@@ -172,7 +179,7 @@ function App() {
               type="number"
               step="0.1"
               min="0"
-              value={coffeeAmount()}
+              value={formatDisplayValue(coffeeAmount())}
               onInput={handleCoffeeInput}
               onBlur={handleCoffeeBlur}
             />
@@ -184,7 +191,7 @@ function App() {
               type="number"
               step="0.1"
               min="0"
-              value={waterAmount()}
+              value={formatDisplayValue(waterAmount())}
               onInput={handleWaterInput}
               onBlur={handleWaterBlur}
             />
@@ -196,7 +203,7 @@ function App() {
               type="number"
               step="0.1"
               min="1"
-              value={ratio()}
+              value={formatDisplayValue(ratio())}
               onInput={handleRatioInput}
               onBlur={handleRatioBlur}
             />
@@ -208,7 +215,7 @@ function App() {
               type="number"
               step="0.1"
               min="0"
-              value={bloomFactor()}
+              value={formatDisplayValue(bloomFactor())}
               onInput={handleBloomFactorInput}
             />
           </div>

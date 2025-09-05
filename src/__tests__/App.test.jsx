@@ -167,6 +167,28 @@ test("ratio calculates when coffee and water are manually set", () => {
   expect(ratioInput).toHaveValue(12); // ratio should calculate: 360/30 = 12
 });
 
+test("visual rounding works for decimal values", () => {
+  const { getByLabelText } = render(() => <App />);
+
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Test case: 15g coffee, 250g water should show 16.67 ratio
+  fireEvent.input(coffeeInput, { target: { value: "15" } });
+  fireEvent.blur(coffeeInput);
+  fireEvent.input(waterInput, { target: { value: "250" } });
+  fireEvent.blur(waterInput);
+
+  expect(ratioInput).toHaveValue(16.67); // 250/15 = 16.666... rounds to 16.67
+
+  // Test reverse case: 15g coffee, 16.67 ratio should show 250g water
+  fireEvent.input(ratioInput, { target: { value: "16.67" } });
+  fireEvent.blur(ratioInput);
+
+  expect(waterInput).toHaveValue(250); // 15 * 16.67 = 250.05, rounds to 250
+});
+
 test("ratio calculates regardless of field order (water first, then coffee)", () => {
   const { getByLabelText } = render(() => <App />);
 
