@@ -1,4 +1,4 @@
-# Product Requirements Document: Ratio Visualizer
+# Product Requirements Document: Pour Calculator
 
 ## Purpose of application
 

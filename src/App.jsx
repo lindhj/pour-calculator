@@ -107,7 +107,7 @@ function App() {
       const isBloom = i === 0 && segmentCount() > 1;
       segments.push(
         <div class="segment-wrapper" style={{ flex: `0 0 ${flexBasis}%` }}>
-          <div class={`segment${isBloom ? ' bloom' : ''}`} />
+          <div class={`segment${isBloom ? " bloom" : ""}`} />
           <div class="segment-label">{Math.round(cumulativeAmount)}g</div>
         </div>,
       );
@@ -118,7 +118,7 @@ function App() {
 
   return (
     <div class="app">
-      <h1>Ratio Visualizer</h1>
+      <h1>Pour Calculator</h1>
 
       <div class="calculator-section">
         <h2>Coffee to Water Calculator (1:{ratio()} ratio)</h2>

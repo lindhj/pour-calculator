@@ -4,7 +4,7 @@ import App from "../App";
 test("App renders without crashing", () => {
   const { getByText } = render(() => <App />);
 
-  expect(getByText("Ratio Visualizer")).toBeInTheDocument();
+  expect(getByText("Pour Calculator")).toBeInTheDocument();
   expect(
     getByText("Coffee to Water Calculator (1:15 ratio)"),
   ).toBeInTheDocument();
