@@ -105,15 +105,50 @@ test("empty input handling", () => {
   expect(coffeeInput).toHaveValue(0);
 });
 
-test("negative input handling", () => {
+test("negative coffee input is rejected", () => {
   const { getByLabelText } = render(() => <App />);
-
   const coffeeInput = getByLabelText("Coffee (g):");
   const waterInput = getByLabelText("Water (g):");
 
+  // Try negative, then valid - valid input should work
   fireEvent.input(coffeeInput, { target: { value: "-5" } });
-  expect(coffeeInput).toHaveValue(-5);
-  expect(waterInput).toHaveValue(300);
+  fireEvent.input(coffeeInput, { target: { value: "30" } });
+  expect(coffeeInput).toHaveValue(30);
+  expect(waterInput).toHaveValue(450); // 30 * 15
+});
+
+test("negative water input is rejected", () => {
+  const { getByLabelText } = render(() => <App />);
+  const waterInput = getByLabelText("Water (g):");
+  const coffeeInput = getByLabelText("Coffee (g):");
+
+  // Try negative, then valid - valid input should work
+  fireEvent.input(waterInput, { target: { value: "-10" } });
+  fireEvent.input(waterInput, { target: { value: "450" } });
+  expect(waterInput).toHaveValue(450);
+  expect(coffeeInput).toHaveValue(30); // 450 / 15
+});
+
+test("negative ratio input is rejected", () => {
+  const { getByLabelText } = render(() => <App />);
+  const ratioInput = getByLabelText("Ratio (1:x):");
+  const waterInput = getByLabelText("Water (g):");
+
+  // Try negative, then valid - valid input should work
+  fireEvent.input(ratioInput, { target: { value: "-2" } });
+  fireEvent.input(ratioInput, { target: { value: "12" } });
+  expect(ratioInput).toHaveValue(12);
+  expect(waterInput).toHaveValue(240); // 20 * 12
+});
+
+test("negative bloom factor input is rejected", () => {
+  const { getByLabelText } = render(() => <App />);
+  const bloomFactorInput = getByLabelText("Bloom Factor:");
+
+  // Try negative, then valid - valid input should work
+  fireEvent.input(bloomFactorInput, { target: { value: "-1" } });
+  fireEvent.input(bloomFactorInput, { target: { value: "3" } });
+  expect(bloomFactorInput).toHaveValue(3);
 });
 
 test("segments are rendered", () => {

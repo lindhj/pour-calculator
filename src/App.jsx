@@ -28,19 +28,20 @@ function App() {
       return;
     }
     const value = parseFloat(inputValue);
-    if (!isNaN(value) && value >= 0) {
-      setCoffeeAmount(value);
-      if (userModified().water && waterAmount() > 0 && value > 0) {
-        // Both coffee and water are user-modified, calculate ratio
-        setRatio(waterAmount() / value);
-        setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
-      } else {
-        // Update water based on current ratio
-        setWaterAmount(value * ratio());
-        setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
-      }
-      setLastChanged("coffee");
+    if (isNaN(value) || value < 0) {
+      return; // Reject invalid or negative values
     }
+    setCoffeeAmount(value);
+    if (userModified().water && waterAmount() > 0 && value > 0) {
+      // Both coffee and water are user-modified, calculate ratio
+      setRatio(waterAmount() / value);
+      setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
+    } else {
+      // Update water based on current ratio
+      setWaterAmount(value * ratio());
+      setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
+    }
+    setLastChanged("coffee");
   };
 
   const handleCoffeeBlur = () => {
@@ -55,19 +56,20 @@ function App() {
       return;
     }
     const value = parseFloat(inputValue);
-    if (!isNaN(value) && value >= 0) {
-      setWaterAmount(value);
-      if (userModified().coffee && coffeeAmount() > 0 && value > 0) {
-        // Both coffee and water are user-modified, calculate ratio
-        setRatio(value / coffeeAmount());
-        setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
-      } else {
-        // Update coffee based on current ratio
-        setCoffeeAmount(value / ratio());
-        setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
-      }
-      setLastChanged("water");
+    if (isNaN(value) || value < 0) {
+      return; // Reject invalid or negative values
     }
+    setWaterAmount(value);
+    if (userModified().coffee && coffeeAmount() > 0 && value > 0) {
+      // Both coffee and water are user-modified, calculate ratio
+      setRatio(value / coffeeAmount());
+      setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
+    } else {
+      // Update coffee based on current ratio
+      setCoffeeAmount(value / ratio());
+      setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
+    }
+    setLastChanged("water");
   };
 
   const handleWaterBlur = () => {
@@ -81,9 +83,10 @@ function App() {
       return;
     }
     const value = parseFloat(inputValue);
-    if (!isNaN(value) && value >= 0) {
-      setBloomFactor(value);
+    if (isNaN(value) || value < 0) {
+      return; // Reject invalid or negative values
     }
+    setBloomFactor(value);
   };
 
   const handleRatioInput = (e) => {
@@ -93,15 +96,16 @@ function App() {
       return;
     }
     const value = parseFloat(inputValue);
-    if (!isNaN(value) && value > 0) {
-      setRatio(value);
-      if (lastChanged() === "coffee") {
-        setWaterAmount(coffeeAmount() * value);
-        setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
-      } else {
-        setCoffeeAmount(waterAmount() / value);
-        setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
-      }
+    if (isNaN(value) || value <= 0) {
+      return; // Reject invalid, negative, or zero values (ratio must be positive)
+    }
+    setRatio(value);
+    if (lastChanged() === "coffee") {
+      setWaterAmount(coffeeAmount() * value);
+      setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated
+    } else {
+      setCoffeeAmount(waterAmount() / value);
+      setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
     }
   };
 
