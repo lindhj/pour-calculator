@@ -34,6 +34,7 @@ function App() {
     setCoffeeAmount(value);
     if (userModified().water && waterAmount() > 0 && value > 0) {
       // Both coffee and water are user-modified, calculate ratio
+      // Guard: Only calculate ratio if coffee is non-zero
       setRatio(waterAmount() / value);
       setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
     } else {
@@ -62,12 +63,16 @@ function App() {
     setWaterAmount(value);
     if (userModified().coffee && coffeeAmount() > 0 && value > 0) {
       // Both coffee and water are user-modified, calculate ratio
+      // Guard: coffeeAmount() > 0 already protects against division by zero
       setRatio(value / coffeeAmount());
       setUserModified((prev) => ({ ...prev, ratio: false })); // ratio is now calculated
     } else {
       // Update coffee based on current ratio
-      setCoffeeAmount(value / ratio());
-      setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
+      // Guard: ratio validation ensures ratio > 0, but check defensively
+      if (ratio() > 0) {
+        setCoffeeAmount(value / ratio());
+        setUserModified((prev) => ({ ...prev, coffee: false })); // coffee is now calculated
+      }
     }
     setLastChanged("water");
   };

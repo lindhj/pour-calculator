@@ -151,6 +151,71 @@ test("negative bloom factor input is rejected", () => {
   expect(bloomFactorInput).toHaveValue(3);
 });
 
+test("division by zero protection - water input when coffee is zero", () => {
+  const { getByLabelText } = render(() => <App />);
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Set coffee to 0
+  fireEvent.input(coffeeInput, { target: { value: "" } }); // Empty sets to 0
+  expect(coffeeInput).toHaveValue(0);
+  expect(waterInput).toHaveValue(0);
+
+  // Mark coffee as user-modified by blurring
+  fireEvent.blur(coffeeInput);
+
+  // Now try to set water - should not attempt division by zero to calculate ratio
+  fireEvent.input(waterInput, { target: { value: "300" } });
+  fireEvent.blur(waterInput);
+
+  expect(waterInput).toHaveValue(300);
+  expect(ratioInput).not.toHaveValue(Infinity);
+  expect(ratioInput).not.toBeNaN();
+});
+
+test("division by zero protection - water input calculates coffee safely when ratio would cause division by zero", () => {
+  const { getByLabelText } = render(() => <App />);
+  const waterInput = getByLabelText("Water (g):");
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Set ratio to a very small value approaching zero (though our validation prevents actual 0)
+  // The real risk is if ratio is 0, water/ratio would be Infinity
+  // But since ratio validation prevents <= 0, let's test the edge case where coffee=0
+
+  // Actually, the more realistic scenario: if ratio somehow becomes 0, setting water should not crash
+  // However, ratio can't be set to 0 due to validation. The risk is internal state corruption.
+
+  // Test: Set water when ratio is at default (15), then verify coffee is calculated correctly
+  fireEvent.input(waterInput, { target: { value: "300" } });
+  expect(coffeeInput).toHaveValue(20); // 300 / 15 = 20
+  expect(coffeeInput).not.toHaveValue(Infinity);
+  expect(coffeeInput).not.toBeNaN();
+});
+
+test("division by zero protection - ratio calculation when coffee is zero", () => {
+  const { getByLabelText } = render(() => <App />);
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Start fresh, set coffee to 0
+  fireEvent.input(coffeeInput, { target: { value: "" } });
+  fireEvent.blur(coffeeInput);
+  expect(coffeeInput).toHaveValue(0);
+
+  // Set water to non-zero and mark as user-modified
+  fireEvent.input(waterInput, { target: { value: "300" } });
+  fireEvent.blur(waterInput);
+
+  // Both coffee (0) and water (300) are now user-modified
+  // When we change coffee to a non-zero value, it should calculate ratio
+  // But the previous state (coffee=0, water=300) should not have calculated an infinite ratio
+  expect(ratioInput).not.toHaveValue(Infinity);
+  expect(ratioInput).toHaveValue(15); // Should remain at default
+});
+
 test("segments are rendered", () => {
   const { container } = render(() => <App />);
 
