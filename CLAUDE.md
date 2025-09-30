@@ -23,8 +23,6 @@
 - Display value rounding (max 2 decimal places)
 - Comprehensive test coverage with input validation and interaction tests
 
-## Current Focus
-
 ## Commit Message Guidelines
 
 - IMPORTANT: Commit messages should be descriptive but short and contain no information about the author or AI tool
@@ -37,8 +35,9 @@
 
 - **Framework**: SolidJS
 - **Build Tool**: Vite
-- **Dependencies**: Only solid-js and vite (dev dependency)
-- **No additional libraries** for styling, routing or state management
+- **Runtime Dependencies**: Only solid-js
+- **Dev Dependencies**: vite, vite-plugin-solid, vitest, @solidjs/testing-library, @testing-library/jest-dom, eslint (with plugins), prettier, jsdom
+- **No additional libraries** for styling, routing or state management beyond core development tooling
 - **Development**: `npm run dev` for local development with hot-reloading
 
 ## Architecture Principles
@@ -51,13 +50,16 @@
 ## File Structure
 
 /src
-
 - App.jsx (main component)
 - index.jsx (entry point)
 - index.css (minimal styling)
-  /package.json
-  /vite.config.js
-  /index.html
+- __tests__/
+  - App.test.jsx (component tests)
+  - setup.js (test configuration)
+
+/package.json
+/vite.config.js
+/index.html
 
 ## Development Guidelines
 
