@@ -7,7 +7,8 @@
       "Bash(npm outdated)",
       "WebSearch",
       "Bash(node:*)",
-      "Bash(npm view:*)"
+      "Bash(npm view:*)",
+      "WebFetch(domain:vite.dev)"
     ],
     "deny": [],
     "ask": []
