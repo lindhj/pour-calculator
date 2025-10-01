@@ -1,6 +1,40 @@
 import { createSignal } from "solid-js";
 
 function App() {
+  /*
+   * STATE MACHINE: Three-field reactive calculation system
+   *
+   * Constraint: water = coffee × ratio (two degrees of freedom)
+   *
+   * Goal: Allow user to edit any field and have the system intelligently
+   * calculate the third field without requiring explicit "lock" controls.
+   *
+   * State tracking:
+   *   - userModified: {coffee, water, ratio} - which fields user has directly edited
+   *   - lastChanged: "coffee" | "water" - which amount field was edited most recently
+   *
+   * Decision logic:
+   *
+   *   When COFFEE changes:
+   *     - If both coffee AND water are user-modified → calculate RATIO
+   *     - Otherwise → calculate WATER (ratio is "truth")
+   *
+   *   When WATER changes:
+   *     - If both coffee AND water are user-modified → calculate RATIO
+   *     - Otherwise → calculate COFFEE (ratio is "truth")
+   *
+   *   When RATIO changes:
+   *     - Use lastChanged to determine which amount to recalculate:
+   *       - If lastChanged === "coffee" → calculate WATER
+   *       - If lastChanged === "water" → calculate COFFEE
+   *
+   * This creates intuitive behavior:
+   *   - "I want 20g coffee at 1:15 ratio" → water calculates to 300g
+   *   - "I want 300g water at 1:15 ratio" → coffee calculates to 20g
+   *   - "I have 20g coffee and 300g water" → ratio calculates to 15
+   *   - "I set coffee and water, now change ratio" → last-set amount recalculates
+   */
+
   const [segmentCount, setSegmentCount] = createSignal(2);
   const [coffeeAmount, setCoffeeAmount] = createSignal(20);
   const [waterAmount, setWaterAmount] = createSignal(300);
