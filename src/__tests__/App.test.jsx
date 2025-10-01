@@ -110,7 +110,6 @@ test("empty input handling - coffee and water", () => {
 test("empty input handling - ratio resets and recalculates", () => {
   const { getByLabelText } = render(() => <App />);
 
-  const coffeeInput = getByLabelText("Coffee (g):");
   const waterInput = getByLabelText("Water (g):");
   const ratioInput = getByLabelText("Ratio (1:x):");
 
@@ -212,7 +211,6 @@ test("division by zero protection - water input calculates coffee safely when ra
   const { getByLabelText } = render(() => <App />);
   const waterInput = getByLabelText("Water (g):");
   const coffeeInput = getByLabelText("Coffee (g):");
-  const ratioInput = getByLabelText("Ratio (1:x):");
 
   // Set ratio to a very small value approaching zero (though our validation prevents actual 0)
   // The real risk is if ratio is 0, water/ratio would be Infinity
