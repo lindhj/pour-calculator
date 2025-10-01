@@ -110,7 +110,9 @@ body {
 
 .input-group {
   display: flex;
+  flex-wrap: wrap;
   gap: 20px;
+  justify-content: center;
 }
 
 .input-field {
@@ -132,9 +134,29 @@ body {
   border-radius: 4px;
   text-align: center;
   width: 100px;
+  max-width: 100%;
 }
 
 .input-field input:focus {
   outline: none;
   border-color: #007acc;
+}
+
+/* Mobile responsive layout */
+@media (max-width: 600px) {
+  .input-group {
+    gap: 15px;
+  }
+
+  .input-field {
+    min-width: 120px;
+  }
+
+  .input-field input {
+    width: 100%;
+  }
+
+  .bar-container {
+    width: 90%;
+  }
 }

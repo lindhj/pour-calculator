@@ -21,6 +21,7 @@
 - Visual distinction for bloom segment vs regular segments
 - Real-time updates and input validation
 - Display value rounding (max 2 decimal places)
+- Responsive mobile layout (portrait mode optimized for phones)
 - Comprehensive test coverage with input validation and interaction tests
 
 ## Commit Message Guidelines
@@ -65,8 +66,10 @@
 
 - Use reactive signals for state management
 - No persistent state - everything resets on page reload
-- Flexbox for layouts
+- Flexbox for layouts with responsive mobile support
 - Inline styles or minimal CSS
+- Mobile-first considerations (portrait mode on phones is primary use case)
+- Desktop layout should remain consistent when adding mobile responsiveness
 - Focus on readability over optimization
 - No build optimizations needed initially
 
