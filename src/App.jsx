@@ -130,15 +130,19 @@ function App() {
 
   const handleRatioInput = (e) => {
     const inputValue = e.target.value;
+    let value;
     if (inputValue === "") {
-      setRatio(15);
-      return;
+      value = 15; // Reset to default
+      setRatio(value);
+    } else {
+      value = parseFloat(inputValue);
+      if (isNaN(value) || value <= 0) {
+        return; // Reject invalid, negative, or zero values (ratio must be positive)
+      }
+      setRatio(value);
     }
-    const value = parseFloat(inputValue);
-    if (isNaN(value) || value <= 0) {
-      return; // Reject invalid, negative, or zero values (ratio must be positive)
-    }
-    setRatio(value);
+
+    // Recalculate based on lastChanged (applies to both explicit values and empty string reset)
     if (lastChanged() === "coffee") {
       setWaterAmount(coffeeAmount() * value);
       setUserModified((prev) => ({ ...prev, water: false })); // water is now calculated

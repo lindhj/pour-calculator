@@ -89,20 +89,54 @@ test("bloom factor input works", () => {
   expect(bloomFactorInput).toHaveValue(3);
 });
 
-test("empty input handling", () => {
+test("empty input handling - coffee and water", () => {
   const { getByLabelText } = render(() => <App />);
 
   const coffeeInput = getByLabelText("Coffee (g):");
   const waterInput = getByLabelText("Water (g):");
 
+  // Empty coffee should zero both fields
   fireEvent.input(coffeeInput, { target: { value: "" } });
   expect(coffeeInput).toHaveValue(0);
   expect(waterInput).toHaveValue(0);
 
+  // Empty water should zero both fields
   fireEvent.input(coffeeInput, { target: { value: "20" } });
   fireEvent.input(waterInput, { target: { value: "" } });
   expect(waterInput).toHaveValue(0);
   expect(coffeeInput).toHaveValue(0);
+});
+
+test("empty input handling - ratio resets and recalculates", () => {
+  const { getByLabelText } = render(() => <App />);
+
+  const coffeeInput = getByLabelText("Coffee (g):");
+  const waterInput = getByLabelText("Water (g):");
+  const ratioInput = getByLabelText("Ratio (1:x):");
+
+  // Set ratio to 12 (from default 15)
+  fireEvent.input(ratioInput, { target: { value: "12" } });
+  expect(ratioInput).toHaveValue(12);
+  expect(waterInput).toHaveValue(240); // 20 * 12
+
+  // Clear ratio - should reset to 15 AND recalculate water
+  fireEvent.input(ratioInput, { target: { value: "" } });
+  expect(ratioInput).toHaveValue(15);
+  expect(waterInput).toHaveValue(300); // 20 * 15 (should recalculate!)
+});
+
+test("empty input handling - bloom factor resets to default", () => {
+  const { getByLabelText } = render(() => <App />);
+
+  const bloomFactorInput = getByLabelText("Bloom Factor:");
+
+  // Change bloom factor
+  fireEvent.input(bloomFactorInput, { target: { value: "3" } });
+  expect(bloomFactorInput).toHaveValue(3);
+
+  // Clear bloom factor - should reset to default 2.5
+  fireEvent.input(bloomFactorInput, { target: { value: "" } });
+  expect(bloomFactorInput).toHaveValue(2.5);
 });
 
 test("negative coffee input is rejected", () => {
